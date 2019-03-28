@@ -1,4 +1,4 @@
-var roleUpgrader = require('role.upgrader');
+var roleBuilder = require('role.builder');
 
 var roleHarvester = {
 
@@ -35,13 +35,14 @@ var roleHarvester = {
                     creep.moveTo(targets[0], {visualizePathStyle: {stroke: '#ffffff'}});
                 }
             }else{
-                roleUpgrader.run(creep);
+                roleBuilder.run(creep);
             }
         }
         else {
-            var sources = creep.room.find(FIND_SOURCES);
-            if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(sources[0], {visualizePathStyle: {stroke: '#ffaa00'}});
+            var source = creep.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
+            if(creep.harvest(source) == ERR_NOT_IN_RANGE)
+            {
+                creep.moveTo(source, {visualizePathStyle: {stroke: '#ffaa00'}});
             }
         }
 	}

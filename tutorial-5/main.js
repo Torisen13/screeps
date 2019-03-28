@@ -4,13 +4,23 @@ var controlLvl3 = require('control.lvl3');
 
 module.exports.loop = function () {
 
-    for(var name in Memory.creeps) {
-        if(!Game.creeps[name]) {
-            delete Memory.creeps[name];
-            //console.log('Clearing non-existing creep memory:', name);
+    var ticks = Memory.ticks;
+    if(ticks == undefined || ticks == 0)
+    {
+        for(var name in Memory.creeps) {
+            if(!Game.creeps[name]) {
+                delete Memory.creeps[name];
+                //console.log('Clearing non-existing creep memory:', name);
+            }
+        }
+        if(ticks == undefined || ticks == 0)
+        {
+            //console.log("Reset ticks");
+            Memory.ticks = 500;
         }
     }
 
+    Memory.ticks--;
     for(var spawn in Game.spawns)
     {
         var roomlvl = Game.spawns[spawn].room.controller.level;

@@ -3,12 +3,18 @@ var roleUpgrader = require('role.upgrader');
 var roleBuilder = require('role.builder');
 var roleHarvester_test = require('role.harvester_test');
 var roleWallRepairer = require('role.wallrepair');
+var pregame = require('control.pregame');
 
 var roomlvl1 = {
 
     /** @param {Creep} creep **/
     control: function(spawn)
     {
+        if(Game.spawns[spawn].room.memory.pregame == undefined)
+        {
+            pregame.control(spawn);
+        }
+
         var harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester');
         var upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader');
         var builders = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder');

@@ -9,17 +9,39 @@ var roomlvl1 = {
     /** @param {Creep} creep **/
     control: function(spawn)
     {
+        var extensions = Game.spawns[spawn].room.memory.extensions;
+        if(extensions != undefined)
+        {
+            if(extensions < 5)
+            {
+                //console.log(Game.spawns[spawn].pos.x + "," + Game.spawns[spawn].pos.y);
+                let x = Game.spawns[spawn].pos.x;
+                let y = Game.spawns[spawn].pos.y;
+                let err = Game.spawns[spawn].room.createConstructionSite(x+1, y+1, STRUCTURE_EXTENSION);
+                err = Game.spawns[spawn].room.createConstructionSite(x+1, y-1, STRUCTURE_EXTENSION);
+                err = Game.spawns[spawn].room.createConstructionSite(x-1, y+1, STRUCTURE_EXTENSION);
+                err = Game.spawns[spawn].room.createConstructionSite(x-1, y-1, STRUCTURE_EXTENSION);
+                err = Game.spawns[spawn].room.createConstructionSite(x, y+2, STRUCTURE_EXTENSION);
+                console.log("Place Extension");
+                Game.spawns[spawn].room.memory.extensions += 5;
+            }
+        }
+        else
+        {
+            Game.spawns[spawn].room.memory.extensions = 0;
+        }
+
         var harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester');
         var upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader');
         var builders = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder');
         var test = _.filter(Game.creeps, (creep) => creep.memory.role == 'test');
         var wallRepairer = _.filter(Game.creeps, (creep) => creep.memory.role == 'wallRepairer');
 
-        if(test.length < 0)
+        if(test.length < 1)
         {
             var newName = 'Test' + Game.time;
             //console.log('Spawning new upgrader: ' + newName);
-            Game.spawns[spawn].spawnCreep([WORK,CARRY,MOVE], newName,
+            Game.spawns[spawn].spawnCreep([WORK,CARRY,CARRY,MOVE,MOVE], newName,
                 {memory: {role: 'test'}});
         }
 
@@ -27,11 +49,11 @@ var roomlvl1 = {
         {
             var newName = 'WallRepairer' + Game.time;
             //console.log('Spawning new upgrader: ' + newName);
-            Game.spawns[spawn].spawnCreep([WORK,CARRY,MOVE], newName,
+            Game.spawns[spawn].spawnCreep([WORK,CARRY,CARRY,MOVE], newName,
                 {memory: {role: 'wallRepairer'}});
         }
 
-        if(builders.length < 1)
+        if(builders.length < 2)
             {
             var newName = 'Builder' + Game.time;
             //console.log('Spawning new upgrader: ' + newName);
@@ -50,7 +72,7 @@ var roomlvl1 = {
         if(harvesters.length < 2) {
             var newName = 'Harvester' + Game.time;
             //console.log('Spawning new harvester: ' + newName);
-            Game.spawns[spawn].spawnCreep([WORK,CARRY,CARRY,MOVE], newName,
+            Game.spawns[spawn].spawnCreep([WORK,CARRY,CARRY,MOVE,MOVE], newName,
                 {memory: {role: 'harvester'}});
         }
 
